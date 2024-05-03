@@ -16,7 +16,7 @@ public class ProductController {
 
     //2:-Constructor injection is right  way to go.
     @Autowired
-    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -29,9 +29,9 @@ public class ProductController {
     public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
         return productService.getProductById(id);
     }
-
-    public void updateProductByid() {
-
+    @PatchMapping
+    public GenericProductDto updateProductByid(@PathVariable("id") Long id,@RequestBody GenericProductDto genericProductDto){
+        return productService.updateProduct(genericProductDto);
     }
 
     @PostMapping

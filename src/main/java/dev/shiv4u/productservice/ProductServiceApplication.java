@@ -30,28 +30,37 @@ public class ProductServiceApplication implements CommandLineRunner{
     }
     @Override
     public void run(String... args) throws Exception{
-        Category category=new Category();
+        // create,setVale,save into DB using Hibernate:-
+/*      Category category=new Category();
         category.setName("electronics");
         Category savedCategory=categoryRepository.save(category);
+*/
+
+ /*
         Price price=new Price("Rupee",10.0);
         Price savePrice=priceRepository.save(price);
-
-        Product product=new Product();
+*/
+/*        Product product=new Product();
         product.setTitle("iPhone4");
         product.setImage("image url");
         product.setDescription("Best phone ever");
         product.setCategory(savedCategory);
         product.setPrice(savePrice);
+        productRepository.save(product);
+*/
 
-        //productRepository.save(product);
-//        Product product1=productRepository.findByTitle("iphone4");
-//        System.out.println(product1);
+/*
+        Product product1=productRepository.findByTitle("iphone4");
+        System.out.println(product1);
+
 //        Optional<Category> categoryOptional = categoryRepository.
-//				findById(UUID.fromString("02600b88-43f3-4341-8bff-ec665a17c21c"));
+//				findById(UUID.fromString("0405b50d-afd1-486c-b082-003291bfbb56"));
 //        if(!categoryOptional.isEmpty()) {
 //			Category category = categoryOptional.get();
 //			System.out.println(category.getProduct());
 //		}
+*/
+
 //        productRepository.deleteById(UUID.fromString("8ffdd9b4-acd1-48a3-9c44-ec92c2b4e5b1"));
     }
 }

@@ -46,6 +46,11 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
+    public GenericProductDto updateProduct(GenericProductDto genericProductDto) {
+        return convertFakeStoreDtoToGenericProductDto(fakeStoreProductClient.);
+    }
+
+    @Override
     public List<GenericProductDto> getAllProducts() {
         List<FakeStoreProductDto> fakeStoreProductDtos =
                 fakeStoreProductClient.getAllProducts();
