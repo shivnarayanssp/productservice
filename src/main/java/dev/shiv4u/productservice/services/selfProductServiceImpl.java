@@ -18,6 +18,11 @@ public class selfProductServiceImpl implements ProductService {
     }
 
     @Override
+    public GenericProductDto updateProductByid(Long productId,GenericProductDto genericProductDto) {
+        return null;
+    }
+
+    @Override
     public List<GenericProductDto> getAllProducts() {
         return null;
     }

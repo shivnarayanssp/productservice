@@ -13,7 +13,6 @@ import java.util.List;
 
 @Primary
 @Service("fakeStoreProductService")
-
 public class FakeStoreProductService implements ProductService {
     private final FakeStoreProductClient fakeStoreProductClient;
 
@@ -46,8 +45,9 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public GenericProductDto updateProduct(GenericProductDto genericProductDto) {
-        return convertFakeStoreDtoToGenericProductDto(fakeStoreProductClient.);
+    public GenericProductDto updateProductByid(Long Id,GenericProductDto genericProductDto) {
+        return convertFakeStoreDtoToGenericProductDto(
+                fakeStoreProductClient.updateProductByid(Id,genericProductDto));
     }
 
     @Override

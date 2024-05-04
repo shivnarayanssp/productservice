@@ -15,6 +15,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Price extends BaseModel{
     private String currency;
-    @OneToOne(cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
     private double price;
 }
