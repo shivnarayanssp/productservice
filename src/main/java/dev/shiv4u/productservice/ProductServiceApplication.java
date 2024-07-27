@@ -30,37 +30,33 @@ public class ProductServiceApplication implements CommandLineRunner{
     }
     @Override
     public void run(String... args) throws Exception{
-        // create,setVale,save into DB using Hibernate:-
-/*      Category category=new Category();
-        category.setName("electronics");
-        Category savedCategory=categoryRepository.save(category);
-*/
+       /* // create,setVale,save into DB using Hibernate:-
+      Category category=new Category();
+      category.setName("electronics");
+      Category savedCategory=categoryRepository.save(category);
 
- /*
-        Price price=new Price("Rupee",10.0);
-        Price savePrice=priceRepository.save(price);
-*/
-/*        Product product=new Product();
-        product.setTitle("iPhone4");
+      Price price=new Price("Rupee",10.0);
+      //Price savePrice=priceRepository.save(price);
+      //add product details in our local database:-
+        Product product=new Product();
+        product.setTitle("iPhone6");
         product.setImage("image url");
         product.setDescription("Best phone ever");
         product.setCategory(savedCategory);
-        product.setPrice(savePrice);
+        product.setPrice(price);
         productRepository.save(product);
-*/
 
-/*
-        Product product1=productRepository.findByTitle("iphone4");
+        Product product1=productRepository.findByTitle("iphone5");
         System.out.println(product1);
 
-//        Optional<Category> categoryOptional = categoryRepository.
-//				findById(UUID.fromString("0405b50d-afd1-486c-b082-003291bfbb56"));
-//        if(!categoryOptional.isEmpty()) {
-//			Category category = categoryOptional.get();
-//			System.out.println(category.getProduct());
-//		}
+        Optional<Category> categoryOptional = categoryRepository.
+				findById(UUID.fromString("52c62741-46bc-4dcd-90f6-d4e068be5bce"));
+        if(!categoryOptional.isEmpty()) {
+			Category category1 = categoryOptional.get();
+			System.out.println(category1.getProduct());
+		}
 */
+        //productRepository.deleteById(UUID.fromString("c4be258a-1735-4af8-a81e-eb6017a14279"));
 
-//        productRepository.deleteById(UUID.fromString("8ffdd9b4-acd1-48a3-9c44-ec92c2b4e5b1"));
     }
 }

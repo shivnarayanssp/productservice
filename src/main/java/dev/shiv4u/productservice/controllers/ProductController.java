@@ -5,35 +5,33 @@ import dev.shiv4u.productservice.exceptions.NotFoundException;
 import dev.shiv4u.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
-
     //2:-Constructor injection is right  way to go.
     @Autowired
-    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
-
     @GetMapping
     public List<GenericProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
-
     @GetMapping("/{id}")
     public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
         return productService.getProductById(id);
     }
     @PatchMapping("/{id}")
-    public GenericProductDto updateProductByid(@PathVariable("id") Long productId,@RequestBody GenericProductDto genericProductDto){
-        return productService.updateProductByid(productId,genericProductDto);
+    public GenericProductDto updateProductByid(@PathVariable("id") Long id, @RequestBody GenericProductDto genericProductDto){
+        return productService.updateProductByid(id,genericProductDto);
     }
-
     @PostMapping
     public GenericProductDto createproduct(@RequestBody GenericProductDto genericProductDto) {
         return productService.createProduct(genericProductDto);
