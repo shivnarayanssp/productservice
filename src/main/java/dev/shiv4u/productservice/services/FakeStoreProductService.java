@@ -5,13 +5,12 @@ import dev.shiv4u.productservice.exceptions.NotFoundException;
 import dev.shiv4u.productservice.thirdpartyclients.fakestore.FakeStoreProductClient;
 import dev.shiv4u.productservice.thirdpartyclients.fakestore.dtos.FakeStoreProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Primary
+
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService {
     private final FakeStoreProductClient fakeStoreProductClient;
@@ -20,7 +19,6 @@ public class FakeStoreProductService implements ProductService {
     public FakeStoreProductService(FakeStoreProductClient fakeStoreProductClient) {
         this.fakeStoreProductClient = fakeStoreProductClient;
     }
-
     public GenericProductDto convertFakeStoreDtoToGenericProductDto(FakeStoreProductDto fakeStoreProductDto) {
         GenericProductDto genericProductDto = new GenericProductDto();
         genericProductDto.setId(fakeStoreProductDto.getId());
@@ -31,7 +29,21 @@ public class FakeStoreProductService implements ProductService {
         genericProductDto.setCategory(fakeStoreProductDto.getCategory());
         return genericProductDto;
     }
-
+    /*//convert UUID-->Long
+    private Long convertUuidToLong(UUID uid) {
+        long val = -1;
+        do {
+            final ByteBuffer buffer = ByteBuffer.wrap(new byte[16]);
+            buffer.putLong(uid.getLeastSignificantBits());
+            buffer.putLong(uid.getMostSignificantBits());
+            final BigInteger bi = new BigInteger(buffer.array());
+            val = bi.longValue();
+        }
+        // We also make sure that the ID is in positive space, if its not we simply repeat the process
+        while (val < 0);
+        System.out.println(val);
+        return val;
+    }*/
     @Override
     public GenericProductDto getProductById(Long id) throws NotFoundException {
         return convertFakeStoreDtoToGenericProductDto(
@@ -45,27 +57,24 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public GenericProductDto updateProductByid(Long Id,GenericProductDto genericProductDto) {
+    public GenericProductDto updateProductByid(Long id,GenericProductDto genericProductDto) {
         return convertFakeStoreDtoToGenericProductDto(
-                fakeStoreProductClient.updateProductByid(Id,genericProductDto));
+                fakeStoreProductClient.updateProductByid(id,genericProductDto));
     }
 
     @Override
     public List<GenericProductDto> getAllProducts() {
         List<FakeStoreProductDto> fakeStoreProductDtos =
                 fakeStoreProductClient.getAllProducts();
-
         List<GenericProductDto> genericProductDtos = new ArrayList<>();
         for (FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos) {
             GenericProductDto genericProductDto = convertFakeStoreDtoToGenericProductDto(fakeStoreProductDto);
-
             genericProductDtos.add(genericProductDto);
         }
-
         return genericProductDtos;
     }
 
-    @Override
+   @Override
     public GenericProductDto deleteProduct(Long id) {
         return convertFakeStoreDtoToGenericProductDto(
                 fakeStoreProductClient.deleteProduct(id)

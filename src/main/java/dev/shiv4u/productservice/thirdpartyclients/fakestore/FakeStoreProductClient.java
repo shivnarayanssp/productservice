@@ -12,8 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class FakeStoreProductClient {
@@ -34,7 +37,6 @@ public class FakeStoreProductClient {
         this.productUrl = fakeStoreApiBaseUrl + productPath;
         this.productRequestUrl = fakeStoreApiBaseUrl + fakeStoreProductPath;
     }
-
     public FakeStoreProductDto getProductById(Long id) throws NotFoundException {
         //RestTemplate help to call Api(like fakestoreApi/selfProductApi)
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -46,6 +48,7 @@ public class FakeStoreProductClient {
         if (fakeStoreProductDto == null) {
             throw new NotFoundException("product with id: " + id + "not found");
         }
+        //System.out.println(fakeStoreProductDto.getCategory());
         return fakeStoreProductDto;
     }
 
