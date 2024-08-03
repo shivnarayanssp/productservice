@@ -11,5 +11,6 @@ public class GenericProductDto {
     private String description;
     private String image;
     private String category;
+    private String currency;
     private double price;
 }

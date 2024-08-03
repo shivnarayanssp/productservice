@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class ExceptionDto {
+public class ExceptionDto extends Throwable {
     private HttpStatus httpStatus;
     private String message;
 

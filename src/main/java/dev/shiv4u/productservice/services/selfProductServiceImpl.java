@@ -1,28 +1,34 @@
 package dev.shiv4u.productservice.services;
 
+import dev.shiv4u.productservice.dtos.ExceptionDto;
 import dev.shiv4u.productservice.dtos.GenericProductDto;
 import dev.shiv4u.productservice.models.Category;
 import dev.shiv4u.productservice.models.Price;
 import dev.shiv4u.productservice.models.Product;
 import dev.shiv4u.productservice.repositories.CategoryRepository;
+import dev.shiv4u.productservice.repositories.PriceRepository;
 import dev.shiv4u.productservice.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-
 @Primary
 @Service("selfProductService")
 public class selfProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final PriceRepository priceRepository;
 
     @Autowired
     public selfProductServiceImpl(ProductRepository productRepository,
-                                  CategoryRepository categoryRepository){
+                                  CategoryRepository categoryRepository,
+                                  PriceRepository priceRepository){
         this.productRepository=productRepository;
         this.categoryRepository = categoryRepository;
+        this.priceRepository = priceRepository;
     }
     @Override
     public GenericProductDto getProductById(Long id) {
@@ -37,6 +43,7 @@ public class selfProductServiceImpl implements ProductService {
         genericProductDto.setDescription(product.getDescription());
         genericProductDto.setImage(product.getImage());
         genericProductDto.setPrice(product.getPrice().getPrice());
+        genericProductDto.setCurrency(product.getPrice().getCurrency());
         return genericProductDto;
     }
 
@@ -47,36 +54,88 @@ public class selfProductServiceImpl implements ProductService {
         product.setImage(genericProductDto.getImage());
         product.setDescription(genericProductDto.getDescription());
         Category category = categoryRepository.findByName(genericProductDto.getCategory());
-        Category savedCategory = null;
-        if (category == null) {
-            category.setName("Electronics");
-            savedCategory = categoryRepository.save(category);
+        if(category==null){
+            Category category1=new Category();
+            category1.setName(genericProductDto.getCategory());
+            Category savedCategory = categoryRepository.save(category1);
+            product.setCategory(savedCategory);
+        }else{
+            product.setCategory(category);
         }
-        product.setCategory(savedCategory);
-        Price price = new Price();
+        Price price=new Price();
+        price.setCurrency(genericProductDto.getCurrency());
         price.setPrice(genericProductDto.getPrice());
-        product.setPrice(price);
+        Price savePrice=priceRepository.save(price);
+        product.setPrice(savePrice);
         Product product1 = productRepository.save(product);
         GenericProductDto genericProductDto1 = new GenericProductDto();
         genericProductDto1.setCategory(product1.getCategory().getName());
         genericProductDto1.setDescription(product1.getDescription());
         genericProductDto1.setTitle(product1.getTitle());
+        genericProductDto1.setCurrency(product1.getPrice().getCurrency());
+        genericProductDto1.setPrice(product1.getPrice().getPrice());
         return genericProductDto1;
     }
 
     @Override
-    public GenericProductDto updateProductByid(Long id,GenericProductDto genericProductDto) {
-        return null;
+    public GenericProductDto updateProductByid(Long id,GenericProductDto genericProductDto) throws ExceptionDto {
+        Product product=productRepository.findById(id);
+        if(product==null){
+           throw new ExceptionDto(HttpStatus.NOT_FOUND,"Not_Found");
+        }else{
+            product.setTitle(genericProductDto.getTitle());
+            product.getCategory().setName(genericProductDto.getCategory());
+            product.getPrice().setCurrency(genericProductDto.getCurrency());
+            product.getPrice().setPrice(genericProductDto.getPrice());
+            product.setDescription(genericProductDto.getDescription());
+            product.setImage(genericProductDto.getImage());
+            productRepository.save(product);
+            GenericProductDto genericProductDto1=new GenericProductDto();
+            genericProductDto1.setId(product.getId());
+            genericProductDto1.setTitle(product.getTitle());
+            genericProductDto1.setCategory(product.getCategory().getName());
+            genericProductDto1.setDescription(product.getDescription());
+            genericProductDto1.setImage(product.getImage());
+            genericProductDto1.setPrice(product.getPrice().getPrice());
+            genericProductDto1.setCurrency(product.getPrice().getCurrency());
+            return genericProductDto1;
+        }
     }
 
     @Override
     public List<GenericProductDto> getAllProducts() {
-        return null;
+        List<Product> products=productRepository.findAll();
+        List<GenericProductDto> genericProductDtos=new ArrayList<>();
+        GenericProductDto genericProductDto=new GenericProductDto();
+        for (Product product:products){
+            genericProductDto.setId(product.getId());
+            genericProductDto.setTitle(product.getTitle());
+            genericProductDto.setPrice(product.getPrice().getPrice());
+            genericProductDto.setCurrency(product.getPrice().getCurrency());
+            genericProductDto.setCategory(product.getCategory().getName());
+            genericProductDto.setDescription(product.getDescription());
+            genericProductDto.setImage(product.getImage());
+        }
+        genericProductDtos.add(genericProductDto);
+        return genericProductDtos;
     }
 
     @Override
-    public GenericProductDto deleteProduct(Long id) {
-        return null;
+    public GenericProductDto deleteProduct(Long id) throws ExceptionDto{
+        Product product=productRepository.findById(id);
+        if(product==null){
+            throw new ExceptionDto(HttpStatus.NOT_FOUND,"NOT_FOUND");
+        }
+        productRepository.deleteById(id);
+        GenericProductDto genericProductDto=new GenericProductDto();
+        genericProductDto.setId(product.getId());
+        genericProductDto.setTitle(product.getTitle());
+        genericProductDto.setPrice(product.getPrice().getPrice());
+        genericProductDto.setCurrency(product.getPrice().getCurrency());
+        genericProductDto.setCategory(product.getCategory().getName());
+        genericProductDto.setDescription(product.getDescription());
+        genericProductDto.setImage(product.getImage());
+        return genericProductDto;
     }
 
 }

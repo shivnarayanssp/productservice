@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 @Repository
 public interface PriceRepository extends JpaRepository<Price, Id> {
-
+        Price findPriceById(Long id);
 }

@@ -12,7 +12,7 @@ public class Product extends BaseModel {
     private String title;
     private String description;
     private String image;
-    @ManyToOne
+    @ManyToOne(cascade ={CascadeType.REMOVE,CascadeType.PERSIST})
     @JoinColumn(name = "category")
     private Category category;
     //private double price;
