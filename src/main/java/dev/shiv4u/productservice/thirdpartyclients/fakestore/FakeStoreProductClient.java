@@ -41,6 +41,7 @@ public class FakeStoreProductClient {
         //RestTemplate help to call Api(like fakestoreApi/selfProductApi)
         RestTemplate restTemplate = restTemplateBuilder.build();
         String Url=productUrl+id;
+        System.out.println("Url:-"+Url);
         ResponseEntity<FakeStoreProductDto> response = restTemplate.getForEntity(
                 Url,
                 FakeStoreProductDto.class);
@@ -83,6 +84,16 @@ public class FakeStoreProductClient {
         FakeStoreProductDto[] fakeStoreProductDtos = response.getBody();
         return Arrays.asList(fakeStoreProductDtos);
     }
+    public List<String> getAllCategories() {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+         String Url=productUrl+"categories";
+        System.out.println("Url:-"+Url);
+        ResponseEntity<String[]> response = restTemplate.getForEntity(
+                Url,
+                String[].class);
+        String[] categories = response.getBody();
+        return Arrays.asList(categories);
+    }
 
     public FakeStoreProductDto deleteProduct(Long id) {
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -93,5 +104,15 @@ public class FakeStoreProductClient {
                         .class, id);
         FakeStoreProductDto fakeStoreProductDto = response.getBody();
         return fakeStoreProductDto;
+    }
+
+    public List<FakeStoreProductDto> getAllProductsInCategory(String name) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        String Url=productUrl+"category"+"/"+name;
+        ResponseEntity<FakeStoreProductDto[]> response = restTemplate.getForEntity(
+                Url,
+                FakeStoreProductDto[].class);
+        FakeStoreProductDto[] fakeStoreProductDtos = response.getBody();
+        return Arrays.asList(fakeStoreProductDtos);
     }
 }

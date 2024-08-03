@@ -2,6 +2,7 @@ package dev.shiv4u.productservice.services;
 
 import dev.shiv4u.productservice.dtos.GenericProductDto;
 import dev.shiv4u.productservice.exceptions.NotFoundException;
+import dev.shiv4u.productservice.models.Category;
 import dev.shiv4u.productservice.thirdpartyclients.fakestore.FakeStoreProductClient;
 import dev.shiv4u.productservice.thirdpartyclients.fakestore.dtos.FakeStoreProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,25 +30,32 @@ public class FakeStoreProductService implements ProductService {
         genericProductDto.setCategory(fakeStoreProductDto.getCategory());
         return genericProductDto;
     }
-    /*//convert UUID-->Long
-    private Long convertUuidToLong(UUID uid) {
-        long val = -1;
-        do {
-            final ByteBuffer buffer = ByteBuffer.wrap(new byte[16]);
-            buffer.putLong(uid.getLeastSignificantBits());
-            buffer.putLong(uid.getMostSignificantBits());
-            final BigInteger bi = new BigInteger(buffer.array());
-            val = bi.longValue();
-        }
-        // We also make sure that the ID is in positive space, if its not we simply repeat the process
-        while (val < 0);
-        System.out.println(val);
-        return val;
-    }*/
     @Override
     public GenericProductDto getProductById(Long id) throws NotFoundException {
         return convertFakeStoreDtoToGenericProductDto(
                 fakeStoreProductClient.getProductById(id));
+    }
+    @Override
+    public List<Category> getAllCategories() {
+        List<String> categories = fakeStoreProductClient.getAllCategories();
+        List<Category> categoryList=new ArrayList<>();
+        for(String category:categories){
+            Category category1=new Category();
+            category1.setName(category);
+            categoryList.add(category1);
+        }
+        return categoryList;
+    }
+    @Override
+    public List<GenericProductDto> getAllProductsInCategory(String name) {
+        List<FakeStoreProductDto> fakeStoreProductDtos =
+                fakeStoreProductClient.getAllProductsInCategory(name);
+        List<GenericProductDto> genericProductDtos = new ArrayList<>();
+        for (FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos) {
+            GenericProductDto genericProductDto = convertFakeStoreDtoToGenericProductDto(fakeStoreProductDto);
+            genericProductDtos.add(genericProductDto);
+        }
+        return genericProductDtos;
     }
 
     @Override

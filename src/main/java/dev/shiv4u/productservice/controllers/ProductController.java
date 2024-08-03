@@ -1,7 +1,9 @@
 package dev.shiv4u.productservice.controllers;
 
+import dev.shiv4u.productservice.dtos.ExceptionDto;
 import dev.shiv4u.productservice.dtos.GenericProductDto;
 import dev.shiv4u.productservice.exceptions.NotFoundException;
+import dev.shiv4u.productservice.models.Category;
 import dev.shiv4u.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,8 +30,16 @@ public class ProductController {
     public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
         return productService.getProductById(id);
     }
+  @GetMapping("/categories")
+    public List<Category> getAllCategories(){
+        return productService.getAllCategories();
+    }
+    @GetMapping("/category/{name}")
+    public List<GenericProductDto> getAllProductsInCategory(@PathVariable("name") String name){
+        return productService.getAllProductsInCategory(name);
+    }
     @PatchMapping("/{id}")
-    public GenericProductDto updateProductByid(@PathVariable("id") Long id, @RequestBody GenericProductDto genericProductDto){
+    public GenericProductDto updateProductByid(@PathVariable("id") Long id, @RequestBody GenericProductDto genericProductDto) throws ExceptionDto {
         return productService.updateProductByid(id,genericProductDto);
     }
     @PostMapping
@@ -38,7 +48,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public GenericProductDto deleteProduct(@PathVariable("id") Long id) {
+    public GenericProductDto deleteProduct(@PathVariable("id") Long id) throws ExceptionDto{
         return productService.deleteProduct(id);
     }
     // This is specific to this controller
