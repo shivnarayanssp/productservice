@@ -11,13 +11,13 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity(name="orders")
-public class Order extends  BaseModel{
+@Entity(name = "orders")
+public class Order extends BaseModel {
     @ManyToMany
     @JoinTable(
             name = "product_orders",
-            joinColumns = @JoinColumn(name = "orderId"),
-            inverseJoinColumns = @JoinColumn(name = "productId")
+            joinColumns = @JoinColumn(name = "order_id"), // Standardize naming conventions
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products;
 }

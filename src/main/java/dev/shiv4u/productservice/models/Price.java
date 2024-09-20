@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Price extends BaseModel{
+public class Price extends BaseModel {
     private String currency;
     private double price;
 }

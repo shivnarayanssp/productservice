@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 @Primary
 @Service("selfProductService")
@@ -43,7 +42,7 @@ public class selfProductServiceImpl implements ProductService {
         genericProductDto.setId(product.getId());
         genericProductDto.setTitle(product.getTitle());
         genericProductDto.setCategory(product.getCategory().getName());
-        genericProductDto.setDescription(product.getDescription());
+        genericProductDto.setDescription(product.getDescr());
         genericProductDto.setImage(product.getImage());
         genericProductDto.setPrice(product.getPrice().getPrice());
         genericProductDto.setCurrency(product.getPrice().getCurrency());
@@ -59,13 +58,13 @@ public class selfProductServiceImpl implements ProductService {
     public List<GenericProductDto> getAllProductsInCategory(String name) {
         Category category=categoryRepository.findByName(name);
         List<GenericProductDto> genericProductDtos=new ArrayList<>();
-        for(Product products:category.getProduct()){
+        for(Product products:category.getProducts()){
             GenericProductDto genericProductDto=new GenericProductDto();
             genericProductDto.setId(products.getId());
             genericProductDto.setTitle(products.getTitle());
             genericProductDto.setImage(products.getImage());
             genericProductDto.setCategory(products.getCategory().getName());
-            genericProductDto.setDescription(products.getDescription());
+            genericProductDto.setDescription(products.getDescr());
             genericProductDto.setPrice(products.getPrice().getPrice());
             genericProductDto.setCurrency(products.getPrice().getCurrency());
             genericProductDtos.add(genericProductDto);
@@ -78,7 +77,7 @@ public class selfProductServiceImpl implements ProductService {
         Product product = new Product();
         product.setTitle(genericProductDto.getTitle());
         product.setImage(genericProductDto.getImage());
-        product.setDescription(genericProductDto.getDescription());
+        product.setDescr(genericProductDto.getDescription());
         Category category = categoryRepository.findByName(genericProductDto.getCategory());
         if(category==null){
             Category category1=new Category();
@@ -96,7 +95,7 @@ public class selfProductServiceImpl implements ProductService {
         Product product1 = productRepository.save(product);
         GenericProductDto genericProductDto1 = new GenericProductDto();
         genericProductDto1.setCategory(product1.getCategory().getName());
-        genericProductDto1.setDescription(product1.getDescription());
+        genericProductDto1.setDescription(product1.getDescr());
         genericProductDto1.setTitle(product1.getTitle());
         genericProductDto1.setCurrency(product1.getPrice().getCurrency());
         genericProductDto1.setPrice(product1.getPrice().getPrice());
@@ -113,14 +112,14 @@ public class selfProductServiceImpl implements ProductService {
             product.getCategory().setName(genericProductDto.getCategory());
             product.getPrice().setCurrency(genericProductDto.getCurrency());
             product.getPrice().setPrice(genericProductDto.getPrice());
-            product.setDescription(genericProductDto.getDescription());
+            product.setDescr(genericProductDto.getDescription());
             product.setImage(genericProductDto.getImage());
             productRepository.save(product);
             GenericProductDto genericProductDto1=new GenericProductDto();
             genericProductDto1.setId(product.getId());
             genericProductDto1.setTitle(product.getTitle());
             genericProductDto1.setCategory(product.getCategory().getName());
-            genericProductDto1.setDescription(product.getDescription());
+            genericProductDto1.setDescription(product.getDescr());
             genericProductDto1.setImage(product.getImage());
             genericProductDto1.setPrice(product.getPrice().getPrice());
             genericProductDto1.setCurrency(product.getPrice().getCurrency());
@@ -139,7 +138,7 @@ public class selfProductServiceImpl implements ProductService {
             genericProductDto.setPrice(product.getPrice().getPrice());
             genericProductDto.setCurrency(product.getPrice().getCurrency());
             genericProductDto.setCategory(product.getCategory().getName());
-            genericProductDto.setDescription(product.getDescription());
+            genericProductDto.setDescription(product.getDescr());
             genericProductDto.setImage(product.getImage());
         }
         genericProductDtos.add(genericProductDto);
@@ -158,7 +157,7 @@ public class selfProductServiceImpl implements ProductService {
         genericProductDto.setPrice(product.getPrice().getPrice());
         genericProductDto.setCurrency(product.getPrice().getCurrency());
         genericProductDto.setCategory(product.getCategory().getName());
-        genericProductDto.setDescription(product.getDescription());
+        genericProductDto.setDescription(product.getDescr());
         genericProductDto.setImage(product.getImage());
         return genericProductDto;
     }

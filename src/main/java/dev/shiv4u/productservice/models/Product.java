@@ -11,13 +11,15 @@ import org.hibernate.engine.internal.Cascade;
 @Entity
 public class Product extends BaseModel {
     private String title;
-    private String description;
+    private String descr;
     private String image;
-    @ManyToOne(cascade ={CascadeType.REMOVE,CascadeType.PERSIST})
-    @JoinColumn(name = "category")
+
+    @ManyToOne(cascade = CascadeType.PERSIST) // Adjust cascade type as necessary
+    @JoinColumn(name = "category_id") // Use a more explicit naming convention
     @JsonIgnore
     private Category category;
-    //private double price;
-    @OneToOne(cascade ={CascadeType.REMOVE,CascadeType.PERSIST})
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "price_id") // Explicit join column name for clarity
     private Price price;
 }

@@ -6,6 +6,7 @@ import dev.shiv4u.productservice.models.Category;
 import dev.shiv4u.productservice.thirdpartyclients.fakestore.FakeStoreProductClient;
 import dev.shiv4u.productservice.thirdpartyclients.fakestore.dtos.FakeStoreProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

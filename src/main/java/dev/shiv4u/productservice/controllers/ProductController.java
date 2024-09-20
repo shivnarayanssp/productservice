@@ -4,30 +4,47 @@ import dev.shiv4u.productservice.dtos.ExceptionDto;
 import dev.shiv4u.productservice.dtos.GenericProductDto;
 import dev.shiv4u.productservice.exceptions.NotFoundException;
 import dev.shiv4u.productservice.models.Category;
+import dev.shiv4u.productservice.security.JwtData;
+import dev.shiv4u.productservice.security.TokenValidator;
 import dev.shiv4u.productservice.services.ProductService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.HttpHeaders;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private ProductService productService;
+    private TokenValidator tokenValidator;
     //2:-Constructor injection is right  way to go.
     @Autowired
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService
+                             ,TokenValidator tokenValidator) {
         this.productService = productService;
+        this.tokenValidator=tokenValidator;
     }
     @GetMapping
     public List<GenericProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
     @GetMapping("/{id}")
-    public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {
+    public GenericProductDto getProductById(
+            @Nullable @RequestHeader(HttpHeaders.AUTHORIZATION)String authToken,
+            @PathVariable("id") Long id) throws NotFoundException {
+        Optional<JwtData> jwtDataOptional=tokenValidator.validateToken(authToken);
+        if(jwtDataOptional.isPresent()){
+            //Do whatever needs to be done according to the business logic
+        }
+        GenericProductDto genericProductDto=productService.getProductById(id);
+        if(genericProductDto == null){
+            return new GenericProductDto();
+        }
         return productService.getProductById(id);
     }
   @GetMapping("/categories")
